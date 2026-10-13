@@ -22,6 +22,17 @@ The ESP32 creates its own Wi-Fi access point, allowing a connected device to acc
 - Connecting wires
 - Mobile phone or laptop for viewing the readings
 
+## Hardware Connections
+
+The load cell is connected to the HX711 load-cell amplifier, which interfaces with the ESP32 microcontroller.
+
+| HX711 Pin | ESP32 Connection |
+|---|---|
+| VCC | 3v3 |
+| GND | GND |
+| DT  |  18 |
+| SCK | 19 |
+
 ## How It Works
 
 1. The load cell responds to an applied load by producing a small electrical signal.
@@ -38,6 +49,29 @@ The ESP32 creates its own Wi-Fi access point, allowing a connected device to acc
 4. Connect a phone or laptop to the `ForceMeter` Wi-Fi network.
 5. Open `192.168.4.1` in a web browser to access the measurement page.
 
+## Calibration
+
+The load-cell measurements are acquired using the HX711 amplifier and processed by the ESP32.
+
+- **Calibration method:** Empirical calibration using known reference weights.
+- **Calibration factor:** 189.51 counts per gram, determined experimentally.
+- **Tare operation:** The zero-load reference is calculated by averaging 20 raw HX711 readings at startup (`read_average(20)`).
+- **Measurement unit:** Mass in grams (g) and calculated force in Newtons (N).
+
+The mass is calculated by subtracting the zero-load reference from the raw reading and dividing by the calibration factor. Force is calculated using \(F = mg\), with gravitational acceleration taken as 9.81 m/s².
+
+Calibration should be repeated if the load cell is remounted or the mechanical arrangement changes.
+
+## Limitations
+
+- Measurement accuracy depends on calibration, load-cell mounting, and the correct application of force.
+- Readings may fluctuate due to electrical noise, mechanical movement, vibration, or loose connections.
+- The maximum rated load of the load cell is 10 kg; this is its rated mass capacity under the specified operating conditions, not a guarantee of accuracy across the entire range.
+- The system's accuracy and repeatability have not been formally established against a certified reference instrument.
+- The zero reference is established at startup, so the load cell should be unloaded during initialization.
+- The displayed force is calculated from the measured equivalent mass using standard gravitational acceleration; it is not an independent direct force measurement.
+- Wireless display requires the mobile device to connect to the ESP32's local Wi-Fi access point.
+  
 ## Software and Tools
 
 - Arduino IDE
