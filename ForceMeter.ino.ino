@@ -16,7 +16,7 @@ long zeroRaw = 0;
 
 // ---------------- WIFI ----------------
 const char* ssid = "ForceMeter";
-const char* password = "12345678";
+const char* password = "Password";
 
 // Create web server on port 80
 WebServer server(80);
